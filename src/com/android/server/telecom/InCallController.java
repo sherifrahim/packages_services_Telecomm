@@ -37,6 +37,8 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.os.Trace;
 import android.os.UserHandle;
+import android.os.Vibrator;
+import android.provider.Settings;
 import android.telecom.CallAudioState;
 import android.telecom.ConnectionService;
 import android.telecom.InCallService;
@@ -73,6 +75,12 @@ import java.util.stream.Collectors;
 public class InCallController extends CallsManagerListenerBase {
     public static final int IN_CALL_SERVICE_NOTIFICATION_ID = 3;
     public static final String NOTIFICATION_TAG = InCallController.class.getSimpleName();
+
+    private static final long[] INCALL_VIBRATION_PATTERN = {
+            100,
+            200,
+            0,
+    };
 
     public class InCallServiceConnection {
         /**
@@ -1073,6 +1081,17 @@ public class InCallController extends CallsManagerListenerBase {
     @Override
     public void onCallStateChanged(Call call, int oldState, int newState) {
         maybeTrackMicrophoneUse(isMuted());
+        boolean vibrateOnConnect = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.INCALL_FEEDBACK_VIBRATE, 0, UserHandle.USER_CURRENT) == 1;
+        boolean vibrateOnDisconnect = Settings.System.getIntForUser(mContext.getContentResolver(),
+            Settings.System.INCALL_FEEDBACK_VIBRATE, 0, UserHandle.USER_CURRENT) == 1;
+
+        if (oldState == CallState.DIALING && newState == CallState.ACTIVE && vibrateOnConnect) {
+            vibrate(INCALL_VIBRATION_PATTERN);
+        } else if (oldState == CallState.ACTIVE && newState == CallState.DISCONNECTED
+                && vibrateOnDisconnect) {
+            vibrate(INCALL_VIBRATION_PATTERN);
+        }
         updateCall(call);
     }
 
@@ -1957,5 +1976,9 @@ public class InCallController extends CallsManagerListenerBase {
                                 R.string.notification_incallservice_not_responding_body)));
         notificationManager.notify(NOTIFICATION_TAG, IN_CALL_SERVICE_NOTIFICATION_ID,
                 builder.build());
+    }
+
+    public void vibrate(long[] pattern) {
+        ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(pattern, -1);
     }
 }
