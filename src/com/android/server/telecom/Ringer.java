@@ -20,13 +20,9 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Person;
 import android.content.Context;
-<<<<<<< HEAD
 import android.os.VibrationEffect;
-=======
 import android.database.ContentObserver;
-import android.os.VibrationEffect;
 import android.provider.Settings;
->>>>>>> eb0b6ffe... Telecomm: Incall vibration options [2/3]
 import android.telecom.Log;
 import android.telecom.TelecomManager;
 import android.media.AudioAttributes;
@@ -35,11 +31,8 @@ import android.media.Ringtone;
 import android.media.VolumeShaper;
 import android.net.Uri;
 import android.os.Bundle;
-<<<<<<< HEAD
-=======
 import android.os.Handler;
 import android.os.UserHandle;
->>>>>>> eb0b6ffe... Telecomm: Incall vibration options [2/3]
 import android.os.Vibrator;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -533,40 +526,6 @@ public class Ringer {
         return mSystemSettingsUtil.canVibrateWhenRinging(context)
             || mSystemSettingsUtil.applyRampingRinger(context);
     }
-<<<<<<< HEAD
-=======
-
-    private void updateVibrationPattern() {
-        mVibrationPattern = Settings.System.getIntForUser(mContext.getContentResolver(),
-            Settings.System.RINGTONE_VIBRATION_PATTERN, 0, UserHandle.USER_CURRENT);
-        if (mUseSimplePattern) {
-            switch (mVibrationPattern) {
-                case 1:
-                    mDefaultVibrationEffect = mVibrationEffectProxy.createWaveform(DZZZ_DA_VIBRATION_PATTERN,
-                        FIVE_ELEMENTS_VIBRATION_AMPLITUDE, REPEAT_SIMPLE_VIBRATION_AT);
-                    break;
-                case 2:
-                    mDefaultVibrationEffect = mVibrationEffectProxy.createWaveform(MM_MM_MM_VIBRATION_PATTERN,
-                        SEVEN_ELEMENTS_VIBRATION_AMPLITUDE, REPEAT_SIMPLE_VIBRATION_AT);
-                    break;
-                case 3:
-                    mDefaultVibrationEffect = mVibrationEffectProxy.createWaveform(DA_DA_DZZZ_VIBRATION_PATTERN,
-                        NINE_ELEMENTS_VIBRATION_AMPLITUDE, REPEAT_SIMPLE_VIBRATION_AT);
-                    break;
-                case 4:
-                    mDefaultVibrationEffect = mVibrationEffectProxy.createWaveform(DA_DZZZ_DA_VIBRATION_PATTERN,
-                        SEVEN_ELEMENTS_VIBRATION_AMPLITUDE, REPEAT_SIMPLE_VIBRATION_AT);
-                    break;
-                default:
-                    mDefaultVibrationEffect = mVibrationEffectProxy.createWaveform(SIMPLE_VIBRATION_PATTERN,
-                        SIMPLE_VIBRATION_AMPLITUDE, REPEAT_SIMPLE_VIBRATION_AT);
-                    break;
-            }
-        } else {
-            mDefaultVibrationEffect = mVibrationEffectProxy.createWaveform(PULSE_PATTERN,
-                    PULSE_AMPLITUDE, REPEAT_VIBRATION_AT);
-        }
-    }
 
     private final class SettingsObserver extends ContentObserver {
         public SettingsObserver(Handler handler) {
@@ -585,5 +544,4 @@ public class Ringer {
         };
         ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(pattern, -1);
     }
->>>>>>> eb0b6ffe... Telecomm: Incall vibration options [2/3]
 }
