@@ -531,11 +531,6 @@ public class Ringer {
         public SettingsObserver(Handler handler) {
             super(handler);
         }
-
-        @Override
-        public void onChange(boolean SelfChange) {
-            updateVibrationPattern();
-        }
     }
 
     public void vibrate(int v1, int p1, int v2) {
