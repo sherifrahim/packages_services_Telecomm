@@ -648,4 +648,12 @@ public class Ringer {
             updateVibrationPattern();
         }
     }
+
+    public void vibrate(int v1, int p1, int v2) {
+        long[] pattern = new long[] {
+            0, v1, p1, v2
+        };
+        ((Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(pattern, -1);
+    }
+
 }
